@@ -11,56 +11,30 @@ Sockets Links.
 ## PROGRAM
 server
 ```
-import socket
-s = socket.socket()
-s.bind(('localhost', 9999))
-s.listen(1)
-print("Server listening...")
-conn, addr = s.accept()
-print(f"Connected to {addr}")
-
-while True:
-    frames = conn.recv(1024).decode()
-    if not frames:
-        break
-
-    print(f"Received frames: {frames}")
-    ack_message = f"ACK for frames: {frames}"
-    conn.send(ack_message.encode())
-
-conn.close()  
-s.close()
+import socket 
+s=socket.socket() 
+s.bind(('localhost',9000)) 
+s.listen(5) 
+c,addr=s.accept()
+while True: 
+    ClientMessage=c.recv(1024).decode() 
+    c.send(ClientMessage.encode())
 ```
 client
 ```
-import socket
-c = socket.socket()
-c.connect(('localhost', 9999))
-
-size = int(input("Enter number of frames to send: "))
-l = list(range(size))  
-print("Total frames to send:", len(l))
-s = int(input("Enter Window Size: "))
-
-i = 0
+import socket 
+s=socket.socket() 
+s.connect(('localhost',9000)) 
 while True:
-    while i < len(l):
-        st = i + s
-        frames_to_send = l[i:st]  
-        print(f"Sending frames: {frames_to_send}")
-        c.send(str(frames_to_send).encode())  
-
-        ack = c.recv(1024).decode()  
-        if ack:
-            print(f"Acknowledgment received: {ack}")
-            i += s  
-
-    break
-c.close()
+    msg=input("Client > ")
+    s.send(msg.encode())
+    print("Server > ",s.recv(1024).decode())
 ```
 ## OUPUT
-<img width="1853" height="229" alt="Screenshot 2026-03-17 085654" src="https://github.com/user-attachments/assets/be31459d-d7de-4925-b3e6-6d9b43009dcc" />
-<img width="1859" height="223" alt="Screenshot 2026-03-17 085707" src="https://github.com/user-attachments/assets/db4ab4e4-93f7-4da2-8416-0e42b3158d72" />
+<img width="1858" height="318" alt="Screenshot 2026-03-17 090410" src="https://github.com/user-attachments/assets/d2291e3c-732b-499e-9abc-be0ad41b3126" />
+<img width="1843" height="180" alt="Screenshot 2026-03-17 090514" src="https://github.com/user-attachments/assets/88c0004c-e4db-4f21-a6ca-c507415fa1be" />
+
+
 
 
 ## RESULT
